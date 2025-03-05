@@ -13,10 +13,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: "${{ github.ref == 'refs/heads/main' && 'production' || github.ref == 'refs/heads/canary' && 'canary' || github.ref == 'refs/heads/staging' && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
+    environment: "${{ github.ref == 'refs/heads/main' && 'production' || github.ref == 'refs/heads/canary' && 'canary' || github.ref == 'refs/heads/staging' && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'development' }}"
     env:
-      JOB_ENV: "${{ github.ref == 'refs/heads/main' && 'production' || github.ref == 'refs/heads/canary' && 'canary' || github.ref == 'refs/heads/staging' && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
-      APP_ENV: "${{ github.ref == 'refs/heads/main' && 'production' || github.ref == 'refs/heads/canary' && 'canary' || github.ref == 'refs/heads/staging' && 'staging' || startsWith(github.ref, 'refs/heads/td-') && format('{0}{1}', 'testing-', github.ref_name) || 'unknown' }}"
+      JOB_ENV: "${{ github.ref == 'refs/heads/main' && 'production' || github.ref == 'refs/heads/canary' && 'canary' || github.ref == 'refs/heads/staging' && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'development' }}"
+      APP_ENV: "${{ github.ref == 'refs/heads/main' && 'production' || github.ref == 'refs/heads/canary' && 'canary' || github.ref == 'refs/heads/staging' && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'development' }}"
       APP_DOMAIN: "${{ startsWith(github.ref, 'refs/heads/td-') && format('{0}{1}', github.ref_name, vars.APP_DOMAIN_TESTING) || github.ref == 'refs/heads/staging' && vars.APP_DOMAIN_STAGING || vars.APP_DOMAIN }}"
 
     permissions:
@@ -105,7 +105,7 @@ jobs:
           token: ${{ secrets.TELEGRAM_DEPLOY_TOKEN }}
           format: markdown
           message: |
-            🚂 The application from repository [${{ steps.lower-repo.outputs.repository }}](https://github.com/${{ steps.lower-repo.outputs.repository }}) has been successfully deployed by [${{ github.actor }}](https://github.com/users/${{ github.actor }}) on ${{ env.APP_ENV }}.
+            🚂 The application from repository [${{ steps.lower-repo.outputs.repository }}](https://github.com/${{ steps.lower-repo.outputs.repository }}) has been successfully deployed by [${{ github.actor }}](https://github.com/${{ github.actor }}).
 
             🏗️ [GitHub Actions Build](https://github.com/${{ steps.lower-repo.outputs.repository }}/actions/runs/${{ github.run_id }})
             🐳 [Image](https://ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ env.GITHUB_SHA_SHORT }})
